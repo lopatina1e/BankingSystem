@@ -6,20 +6,18 @@ public class BankAccount {
     String ownerName;
     String currency;
     private double balance;
+    static int totalAccounts = 0;
 
-    BankAccount(long id, String ownerName, String currency) {
-        this.id = id;
-        this.ownerName = ownerName;
-        this.currency = currency;
-        this.balance = 0;
-    }
-
-    // Конструктор 2: С начальной суммой
-    BankAccount(long id, String ownerName, String currency, double initialAmount) {
-        this.id = id;
+    BankAccount(String ownerName, String currency, double initialAmount) {
+        totalAccounts++;
+        id=totalAccounts;
         this.ownerName = ownerName;
         this.currency = currency;
         this.balance = initialAmount;
+    }
+    
+    BankAccount(String ownerName, String currency) {
+        this(ownerName, currency, 0);
     }
 
     void deposit(double amount) {
@@ -47,11 +45,12 @@ public class BankAccount {
 }
 class BankTest {
     public static void main(String[] args) {
-        BankAccount myAccount = new BankAccount(1, "Alena", "USD", 100);
+BankAccount myAccount = new BankAccount("Alena", "USD", 100);
+    myAccount.showInfo();
 
-        myAccount.showInfo();
-        myAccount.withdraw(50);
-        myAccount.withdraw(1000);
-        myAccount.showInfo();
+    BankAccount secondAccount = new BankAccount("Ivan", "EUR", 500);
+    secondAccount.showInfo();
+    
+    System.out.println("Всего клиентов в банке: " + BankAccount.totalAccounts);
     }
 }
