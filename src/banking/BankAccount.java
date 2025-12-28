@@ -2,9 +2,9 @@ package banking;
 
 public class BankAccount {
 
-    long id;
+    final long id;
     String ownerName;
-    String currency;
+    final String currency;
     private double balance;
     static int totalAccounts = 0;
 
@@ -42,15 +42,33 @@ public class BankAccount {
     void showInfo() {
         System.out.println("Счет №" + id + ", Владелец: " + ownerName + ", Баланс: " + balance + " " + currency);
     }
+    
+    void transferTo(BankAccount receiver, double amount) {
+       if (amount > balance) {
+            System.out.println("❌ Ошибка: Недостаточно средств для перевода!");
+        } 
+   
+        else {
+            this.withdraw(amount);
+            receiver.deposit(amount);
+            
+            System.out.println("💸 Перевод " + amount + " " + currency + " успешно выполнен: " + this.ownerName + " -> " + receiver.ownerName);
+        }
+    }
 }
 class BankTest {
     public static void main(String[] args) {
-BankAccount myAccount = new BankAccount("Alena", "USD", 100);
-    myAccount.showInfo();
+        BankAccount myAccount = new BankAccount("Alena", "USD", 100);
+        BankAccount secondAccount = new BankAccount("Ivan", "USD", 0); 
+        System.out.println("--- До перевода ---");
+        myAccount.showInfo();
+        secondAccount.showInfo();
+        System.out.println();
 
-    BankAccount secondAccount = new BankAccount("Ivan", "EUR", 500);
-    secondAccount.showInfo();
-    
-    System.out.println("Всего клиентов в банке: " + BankAccount.totalAccounts);
+        myAccount.transferTo(secondAccount, 50);
+
+        System.out.println("--- После перевода ---");
+        myAccount.showInfo(); 
+        secondAccount.showInfo();
     }
 }
